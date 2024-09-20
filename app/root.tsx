@@ -7,6 +7,9 @@ import {
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
 
+import '@fontsource-variable/inter';
+
+
 import "./tailwind.css";
 
 export const links: LinksFunction = () => [
@@ -24,14 +27,14 @@ export const links: LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="min-h-screen bg-background font-sans antialiased">
         {children}
         <ScrollRestoration />
         <Scripts />
