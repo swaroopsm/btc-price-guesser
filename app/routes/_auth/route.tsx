@@ -6,7 +6,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get('Cookie'));
 
   if (!session.has('name')) {
-    return redirect('/start');
+    return redirect('/');
   }
 
   return null
