@@ -1,7 +1,8 @@
 import { createCookieSessionStorage } from "@remix-run/node";
+import { prisma } from "./.server/prisma";
 
 type SessionData = {
-  name: string;
+  id: number;
 };
 
 type SessionFlashData = {
@@ -31,4 +32,18 @@ const { getSession, commitSession, destroySession } =
     }
   );
 
-export { getSession, commitSession, destroySession };
+const getCurrentUserId = async (cookie: string | null) => {
+  const session = await getSession(cookie);
+  return session.get('id');
+};
+
+const getCurrentUser = async (cookie: string | null) => {
+  const session = await getSession(cookie);
+  const id = session.get('id');
+
+  if (!id) { return null }
+
+  return prisma.player.findFirst({ where: { id: id } })
+}
+
+export { getSession, commitSession, destroySession, getCurrentUser, getCurrentUserId };
