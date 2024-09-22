@@ -11,6 +11,7 @@ import { Money, Player, Prediction } from "~/types";
 import { useCurrencyFormatter } from "~/hooks";
 import { ArrowUp, ArrowDown, CircleUserRound } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
+import { cn } from "~/lib/utils";
 import {
   Tooltip,
   TooltipTrigger,
@@ -54,7 +55,7 @@ export const LiveCryptoPriceCard = ({
   );
   const isPredictionChangeDisabled = Boolean(prediction);
   const scoreBadgeVariant =
-    player?.score && player.score >= 0 ? undefined : "destructive";
+    player && player.score >= 0 ? undefined : "destructive";
 
   return (
     <Card aria-busy={Boolean(loading || !price)} className="relative">
@@ -118,7 +119,12 @@ export const LiveCryptoPriceCard = ({
                     disabled={isPredictionChangeDisabled}
                     className="group flex gap-2"
                   >
-                    <ArrowUp className="group-hover:animate-bounce" /> High
+                    <ArrowUp
+                      className={cn(
+                        prediction === Prediction.UP && "animate-bounce"
+                      )}
+                    />{" "}
+                    High
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" sideOffset={16}>
@@ -137,7 +143,12 @@ export const LiveCryptoPriceCard = ({
                     disabled={isPredictionChangeDisabled}
                     className="group flex gap-2"
                   >
-                    <ArrowDown className="group-hover:animate-bounce" /> Low
+                    <ArrowDown
+                      className={cn(
+                        prediction === Prediction.DOWN && "animate-bounce"
+                      )}
+                    />{" "}
+                    Low
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" sideOffset={16}>

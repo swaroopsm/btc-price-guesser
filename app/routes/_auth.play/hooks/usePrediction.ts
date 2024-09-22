@@ -11,7 +11,7 @@ interface Props {
 
 export const usePrediction = ({ price, onResolution }: Props) => {
   const [prediction, setPrediction] = useState<Guess | null>(null);
-  const [canCheckPrediction, setCheckPrediction] = useState(false);
+  const [hasTimerPassed, setTimerPassed] = useState(false);
   const [isWatching, setWatching] = useState(false);
 
   const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -21,7 +21,7 @@ export const usePrediction = ({ price, onResolution }: Props) => {
       setWatching(true);
 
       intervalRef.current = setTimeout(() => {
-        setCheckPrediction(true);
+        setTimerPassed(true);
       }, PREDICTION_WATCHER_TIMEOUT_IN_MILLISECONDS);
     }
 
@@ -37,12 +37,12 @@ export const usePrediction = ({ price, onResolution }: Props) => {
   }, [prediction, price]);
 
   useEffect(() => {
-    if (canCheckPrediction) {
+    if (hasTimerPassed) {
       const hasPriceChanged = prediction?.price?.amount !== price?.amount;
 
       if (hasPriceChanged && price && prediction) {
         setPrediction(null);
-        setCheckPrediction(false);
+        setTimerPassed(false);
         setWatching(false);
         intervalRef.current = null;
 
@@ -53,7 +53,7 @@ export const usePrediction = ({ price, onResolution }: Props) => {
         });
       }
     }
-  }, [price, canCheckPrediction, prediction, onResolution]);
+  }, [price, hasTimerPassed, prediction, onResolution]);
 
   return {
     prediction,
