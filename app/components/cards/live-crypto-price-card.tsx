@@ -2,11 +2,12 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/card";
 import { Button } from "../ui/button";
-import { Money } from "~/types";
+import { Money, Prediction } from "~/types";
 import { useCurrencyFormatter } from "~/hooks";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
@@ -16,7 +17,6 @@ import {
   TooltipContent,
   TooltipProvider,
 } from "../ui/tooltip";
-import { Prediction } from "@prisma/client";
 import { useCallback } from "react";
 
 interface Props {
@@ -55,15 +55,9 @@ export const LiveCryptoPriceCard = ({
     <Card aria-busy={Boolean(loading || !price)} className="relative">
       <CardHeader className="pb-2">
         <CardDescription className="flex flex-row gap-2">
-          {loading ? (
-            <Skeleton className="w-10 h-5" />
-          ) : (
-            <span className="uppercase">{ticker}</span>
-          )}
+          {loading ? null : <span className="uppercase">{ticker}</span>}
 
-          {loading ? (
-            <Skeleton className="size-2" />
-          ) : (
+          {loading ? null : (
             <span className="relative flex size-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full size-2 bg-sky-500"></span>
@@ -91,50 +85,63 @@ export const LiveCryptoPriceCard = ({
         )}
       </CardContent>
 
-      <div className="flex gap-2 absolute top-0 right-0 flex-col justify-between h-full py-4 px-2">
-        {loading ? (
-          <>
-            <Skeleton className="size-8" />
-            <Skeleton className="size-8" />
-          </>
-        ) : (
-          <TooltipProvider delayDuration={300}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  aria-label="Predict price up"
-                  onClick={handlePredictionUp}
-                  disabled={isPredictionChangeDisabled}
-                >
-                  <ArrowUp />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                Click to predict that {ticker} will increase in the next minute
-              </TooltipContent>
-            </Tooltip>
+      <CardFooter className="flex flex-col gap-6 border-t p-4 justify-center">
+        <div className="flex gap-2 top-0 right-0 justify-between h-full">
+          {loading ? (
+            <>
+              <Skeleton className="size-8" />
+              <Skeleton className="size-8" />
+            </>
+          ) : (
+            <TooltipProvider delayDuration={300}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    aria-label="Predict price up"
+                    onClick={handlePredictionUp}
+                    disabled={isPredictionChangeDisabled}
+                    className="group flex gap-2"
+                  >
+                    <ArrowUp className="group-hover:animate-bounce" /> High
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" sideOffset={16}>
+                  Click to predict that {ticker} will increase in the next
+                  minute
+                </TooltipContent>
+              </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  aria-label="Predict price down"
-                  onClick={handlePredictionDown}
-                  disabled={isPredictionChangeDisabled}
-                >
-                  <ArrowDown />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                Click to predict that {ticker} will decrease in the next minute
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    aria-label="Predict price down"
+                    onClick={handlePredictionDown}
+                    disabled={isPredictionChangeDisabled}
+                    className="group flex gap-2"
+                  >
+                    <ArrowDown className="group-hover:animate-bounce" /> Low
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" sideOffset={16}>
+                  Click to predict that {ticker} will decrease in the next
+                  minute
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
+
+        {prediction && (
+          <p className="text-sm text-center max-w-[75%]">
+            Hold on tight, you predicted {prediction.price.amount}. May the
+            Crypto gods be your side
+          </p>
         )}
-      </div>
+      </CardFooter>
     </Card>
   );
 };

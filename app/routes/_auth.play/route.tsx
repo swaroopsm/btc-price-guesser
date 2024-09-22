@@ -1,10 +1,8 @@
 import { LoaderFunction } from "@remix-run/node";
-import { useBinanceStream } from "./hooks";
+import { useBinanceStream, usePrediction } from "./hooks";
 import { LiveCryptoPriceCard } from "~/components/cards/live-crypto-price-card";
 import { getCurrentUserId } from "~/sessions";
-import { useEffect, useRef, useState } from "react";
-import { Prediction } from "@prisma/client";
-import { Money } from "~/types";
+import { Prediction } from "~/types";
 
 export const description =
   "A login form with email and password. There's an option to login with Google and a link to sign up if you don't have an account.";
@@ -22,14 +20,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function Start() {
-  const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const [prediction, setPrediction] = useState<{
-    price: Money;
-    expected: Prediction;
-    timestamp: number;
-  } | null>(null);
   const { price, isLoading } = useBinanceStream();
+  const { prediction, setPrediction } = usePrediction({ price });
 
   const handlePredictionChange = (prediction: Prediction) => {
     if (price) {
@@ -41,35 +33,9 @@ export default function Start() {
     }
   };
 
-  useEffect(() => {
-    if (prediction && intervalRef.current) {
-      return;
-    }
-
-    // TODO:
-    // Check if the 60 seconds time has been surpassed
-    // And if yes, keep checking with the new price
-
-    if (prediction && !intervalRef.current) {
-      console.log("calling interval");
-      intervalRef.current = setTimeout(() => {
-        setPrediction(null);
-
-        if (!price) {
-          return;
-        }
-        if (prediction.price.amount > price.amount) {
-          alert("UP");
-        } else {
-          alert("DOWN");
-        }
-      }, 5000);
-    }
-  }, [prediction, price]);
-
   return (
     <div className="min-h-screen items-center flex">
-      <div className="max-w-xl flex-1 mx-auto">
+      <div className="max-w-md flex-1 mx-auto">
         <LiveCryptoPriceCard
           price={price}
           loading={isLoading}
