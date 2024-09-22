@@ -7,9 +7,9 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Button } from "../ui/button";
-import { Money, Prediction } from "~/types";
+import { Money, Player, Prediction } from "~/types";
 import { useCurrencyFormatter } from "~/hooks";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowUp, ArrowDown, CircleUserRound } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import {
   Tooltip,
@@ -24,14 +24,15 @@ interface Props {
   price: Money | null;
   loading?: boolean;
   prediction?: Prediction | null;
+  player?: Player;
 
   onPredictionChange: (prediction: Prediction) => void;
 }
 
 const PriceText = ({ price }: { price: Money }) => {
-  const formatter = useCurrencyFormatter({ currency: price.currency });
+  const formatter = useCurrencyFormatter();
 
-  return formatter.format(price.amount);
+  return formatter.format(price);
 };
 
 export const LiveCryptoPriceCard = ({
@@ -39,6 +40,7 @@ export const LiveCryptoPriceCard = ({
   loading,
   ticker,
   prediction,
+  player,
   onPredictionChange,
 }: Props) => {
   const handlePredictionUp = useCallback(
@@ -53,6 +55,15 @@ export const LiveCryptoPriceCard = ({
 
   return (
     <Card aria-busy={Boolean(loading || !price)} className="relative">
+      <div className="border-b p-4 flex gap-2 justify-between">
+        <div className="flex gap-2 items-center">
+          <CircleUserRound size={16} />
+          {player?.name}
+        </div>
+
+        <div>Score: {player?.score}</div>
+      </div>
+
       <CardHeader className="pb-2">
         <CardDescription className="flex flex-row gap-2">
           {loading ? null : <span className="uppercase">{ticker}</span>}
@@ -134,13 +145,6 @@ export const LiveCryptoPriceCard = ({
             </TooltipProvider>
           )}
         </div>
-
-        {prediction && (
-          <p className="text-sm text-center max-w-[75%]">
-            Hold on tight, you predicted {prediction.price.amount}. May the
-            Crypto gods be your side
-          </p>
-        )}
       </CardFooter>
     </Card>
   );

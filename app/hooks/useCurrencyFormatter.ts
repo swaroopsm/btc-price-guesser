@@ -1,11 +1,18 @@
 import { currencyFormatter } from "~/lib/utils";
 import { useAppContext } from "~/contexts/AppContext";
-import { Currency } from "~/types";
+import { Money } from "~/types";
 
-export const useCurrencyFormatter = ({ currency }: { currency: Currency }) => {
+export const useCurrencyFormatter = () => {
   const { locale } = useAppContext();
-  return currencyFormatter({
-    locale,
-    currency
-  })
+
+  return {
+    format: (price: Money) => {
+      const formatter = currencyFormatter({
+        locale,
+        currency: price.currency,
+      });
+
+      return formatter.format(price.amount);
+    },
+  };
 };

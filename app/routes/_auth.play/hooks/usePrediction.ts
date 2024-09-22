@@ -1,17 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Money, Prediction } from "~/types";
-import { isPredictedPriceCorrect } from "../utils";
+import { Money } from "~/types";
+import { getGuessResult } from "../utils";
+import { Guess, ResolvedGuess } from "../types";
 
 interface Props {
   price: Money | null;
-  onResolution: (isPredictionCorrect: boolean) => void;
+  onResolution: (resolvedGuess: ResolvedGuess) => void;
 }
-
-type Guess = {
-  price: Money;
-  expected: Prediction;
-  timestamp: number;
-};
 
 export const usePrediction = ({ price, onResolution }: Props) => {
   const [prediction, setPrediction] = useState<Guess | null>(null);
@@ -21,28 +16,27 @@ export const usePrediction = ({ price, onResolution }: Props) => {
 
   useEffect(() => {
     if (prediction && !intervalRef.current) {
-      console.log("start poller");
+      console.log("start polling");
+
       intervalRef.current = setTimeout(() => {
-        intervalRef.current = null;
         setCheckPrediction(true);
+        console.log("end polling");
       }, 5000);
     }
 
-    // Cleanup dangling timeouts
-    return () => {
-      if (!prediction && intervalRef.current) {
-        console.log("clear poller");
-        clearTimeout(intervalRef.current);
-      }
-    };
-
     // TODO
     // Clear timeout on unmount
+    // Cleanup dangling timeouts
+    // return () => {
+    //   if (!prediction && intervalRef.current) {
+    //     console.log("clear poller");
+    //     clearTimeout(intervalRef.current);
+    //   }
+    // };
   }, [prediction, price]);
 
   useEffect(() => {
     if (canCheckPrediction) {
-      console.log({ canCheckPrediction });
       const hasPriceChanged = prediction?.price?.amount !== price?.amount;
 
       if (hasPriceChanged && price && prediction) {
@@ -50,13 +44,10 @@ export const usePrediction = ({ price, onResolution }: Props) => {
         setCheckPrediction(false);
         intervalRef.current = null;
 
-        onResolution(
-          isPredictedPriceCorrect({
-            predictedPrice: prediction.price,
-            actualPrice: price,
-            prediction: prediction.expected,
-          })
-        );
+        onResolution({
+          ...prediction,
+          actual: getGuessResult({ guess: prediction, price }),
+        });
       }
     }
   }, [price, canCheckPrediction, prediction, onResolution]);

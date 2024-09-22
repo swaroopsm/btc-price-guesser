@@ -16,24 +16,7 @@ datasource db {
 model Player {
   id        Int      @id @default(autoincrement())
   name      String   @unique
-  guesses   Guess[]
+  score     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model Guess {
-  id         Int         @id @default(autoincrement())
-  prediction Prediction
-  actual     Prediction?
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  player     Player      @relation(fields: [playerId], references: [id])
-  playerId   Int
-
-  @@index([prediction, actual])
-}
-
-enum Prediction {
-  UP
-  DOWN
 }

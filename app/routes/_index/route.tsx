@@ -1,35 +1,35 @@
-import { ActionFunction, LoaderFunction, redirect } from '@remix-run/node';
-import { Start } from './components';
-import { commitSession, getSession, getCurrentUser } from '~/sessions';
-import { findOrCreatePlayer } from '~/.server/game';
+import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import { Start } from "./components";
+import { commitSession, getSession, getCurrentPlayerId } from "~/sessions";
+import { findOrCreatePlayer } from "~/.server/game";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const currentUser = await getCurrentUser(request.headers.get('Cookie'));
+  const currentPlayerId = await getCurrentPlayerId(
+    request.headers.get("Cookie")
+  );
 
-  if (currentUser) {
-    return redirect('/play');
+  if (currentPlayerId) {
+    return redirect("/play");
   }
 
   return null;
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData()
-  const session = await getSession(request.headers.get('Cookie'));
-  const name = String(formData.get('name'));
-  const player = await findOrCreatePlayer({ name })
+  const formData = await request.formData();
+  const session = await getSession(request.headers.get("Cookie"));
+  const name = String(formData.get("name"));
+  const player = await findOrCreatePlayer({ name });
 
+  session.set("id", player.id);
 
-  session.set('id', player.id);
-
-  return redirect('/play', {
+  return redirect("/play", {
     headers: {
-      'Set-Cookie': await commitSession(session)
-    }
-  })
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 };
 
-
 export default function Index() {
-  return <Start />
+  return <Start />;
 }

@@ -1,18 +1,15 @@
 import { Money, Prediction } from "~/types";
+import { Guess } from "./types";
 
-export const isPredictedPriceCorrect = ({
-  predictedPrice,
-  actualPrice,
-  prediction,
+export const getGuessResult = ({
+  guess,
+  price,
 }: {
-  predictedPrice: Money;
-  actualPrice: Money;
-  prediction: Prediction;
+  guess: Guess;
+  price: Money;
 }) => {
-  const actual =
-    actualPrice.amount > predictedPrice.amount
-      ? Prediction.UP
-      : Prediction.DOWN;
+  const result =
+    price.amount > guess.price.amount ? Prediction.UP : Prediction.DOWN;
 
-  return actual === prediction;
+  return result;
 };
