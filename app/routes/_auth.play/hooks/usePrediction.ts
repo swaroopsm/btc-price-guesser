@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Money } from "~/types";
 import { getGuessResult } from "../utils";
 import { Guess, ResolvedGuess } from "../types";
+import { PREDICTION_WATCHER_TIMEOUT_IN_MILLISECONDS } from "../constants";
 
 interface Props {
   price: Money | null;
@@ -21,8 +22,7 @@ export const usePrediction = ({ price, onResolution }: Props) => {
 
       intervalRef.current = setTimeout(() => {
         setCheckPrediction(true);
-        console.log("end polling");
-      }, 5000);
+      }, PREDICTION_WATCHER_TIMEOUT_IN_MILLISECONDS);
     }
 
     // TODO
