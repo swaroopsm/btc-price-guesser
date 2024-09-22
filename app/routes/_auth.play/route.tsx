@@ -92,7 +92,6 @@ export default function Play() {
     }
   };
 
-  const showLastGuess = Boolean(!prediction && lastResolvedGuess);
   const feedbackBannerProps = useMemo<ComponentProps<
     typeof FeedbackBanner
   > | null>(() => {
@@ -203,14 +202,12 @@ export default function Play() {
           />
         </div>
 
-        {(prediction || showLastGuess) && (
+        {feedbackBannerProps && (
           <div className="relative flex justify-center">
-            {feedbackBannerProps && (
-              <FeedbackBanner
-                {...feedbackBannerProps}
-                className="mt-4 absolute top-0"
-              />
-            )}
+            <FeedbackBanner
+              {...feedbackBannerProps}
+              className="mt-4 absolute top-0"
+            />
           </div>
         )}
       </div>
