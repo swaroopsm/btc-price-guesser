@@ -13,9 +13,6 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { generateRandomPlayerName } from "~/lib/seed";
 
-export const description =
-  "A login form with email and password. There's an option to login with Google and a link to sign up if you don't have an account.";
-
 export const Start = () => {
   const [name, setName] = useState("");
 
@@ -52,7 +49,7 @@ export const Start = () => {
                   name="name"
                   id="name"
                   type="name"
-                  placeholder="Quiet-Owl-Wisdom"
+                  placeholder="Quiet Owl"
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}

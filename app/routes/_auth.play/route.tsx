@@ -1,7 +1,7 @@
-import { ActionFunction } from "@remix-run/node";
+import { ActionFunction, redirect } from "@remix-run/node";
 import { useBinanceStream, usePrediction } from "./hooks";
 import { LiveCryptoPriceCard } from "~/components/cards/live-crypto-price-card";
-import { getCurrentPlayer } from "~/sessions";
+import { destroySession, getCurrentPlayer, getSession } from "~/sessions";
 import { AuthOutletContext, Prediction } from "~/types";
 import { ComponentProps, useCallback, useMemo, useState } from "react";
 import { useOutletContext, useSubmit } from "@remix-run/react";
@@ -10,24 +10,44 @@ import { FeedbackBanner } from "~/components/Feedbackbanner";
 import { getPredictionDisplayName } from "./utils";
 import { getRelativePriceChange } from "~/lib/utils";
 import { usePercentageFormatter } from "~/hooks";
+import { Button } from "~/components/ui/button";
 
 // TODO: Change description
 export const description =
   "A login form with email and password. There's an option to login with Google and a link to sign up if you don't have an account.";
 
+enum Actions {
+  UpdateScore = "updateScore",
+  Logout = "logout",
+}
+
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
-  const isPredictionCorrect = formData.get("isPredictionCorrect") === "true";
+  const action = formData.get("action");
 
-  const player = await getCurrentPlayer(request.headers.get("Cookie"));
+  if (action === Actions.UpdateScore) {
+    const isPredictionCorrect = formData.get("isPredictionCorrect") === "true";
 
-  if (isPredictionCorrect) {
-    await player?.incrementScore();
-  } else {
-    await player?.decrementScore();
+    const player = await getCurrentPlayer(request.headers.get("Cookie"));
+
+    if (isPredictionCorrect) {
+      await player?.incrementScore();
+    } else {
+      await player?.decrementScore();
+    }
+
+    return null;
   }
 
-  return null;
+  if (action === Actions.Logout) {
+    const session = await getSession(request.headers.get("Cookie"));
+
+    return redirect("/", {
+      headers: {
+        "Set-Cookie": await destroySession(session),
+      },
+    });
+  }
 };
 
 export default function Play() {
@@ -48,6 +68,7 @@ export default function Play() {
       try {
         submit(
           {
+            action: Actions.UpdateScore,
             isPredictionCorrect,
           },
           { method: "post" }
@@ -148,17 +169,44 @@ export default function Play() {
     return null;
   }, [isWatching, lastResolvedGuess, percentageFormatter, prediction]);
 
+  const handleLogout = () => {
+    submit(
+      {
+        action: Actions.Logout,
+      },
+      { method: "post" }
+    );
+  };
+
   return (
     <div className="min-h-screen items-center flex">
       <div className="max-w-md flex-1 mx-auto">
-        <LiveCryptoPriceCard
-          price={price}
-          loading={isLoading}
-          ticker="BTC"
-          onPredictionChange={handlePredictionChange}
-          prediction={prediction?.expected}
-          player={player}
-        />
+        <div className=" flex flex-col gap-4">
+          <h1 className="text-center text-xl font-medium underline">
+            BTC Price Guesser
+          </h1>
+          <ul className="flex justify-end [&_li]:before:content-['/']">
+            <li>
+              <Button variant="link" size="sm">
+                How it works?
+              </Button>
+            </li>
+            <li>
+              <Button variant="link" size="sm" onClick={handleLogout}>
+                Logout?
+              </Button>
+            </li>
+          </ul>
+
+          <LiveCryptoPriceCard
+            price={price}
+            loading={isLoading}
+            ticker="BTC"
+            onPredictionChange={handlePredictionChange}
+            prediction={prediction?.expected}
+            player={player}
+          />
+        </div>
 
         {(prediction || showLastGuess) && (
           <div className="relative flex justify-center">
