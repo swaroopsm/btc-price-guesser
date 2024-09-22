@@ -69,16 +69,20 @@ export const CryptoPlayerPriceCard = ({
       </div>
 
       <CardHeader className="pb-2">
-        <CardDescription className="flex flex-row gap-2">
-          {loading ? null : <span className="uppercase">{ticker}</span>}
+        {loading ? (
+          <div>
+            <Skeleton className="w-10 h-6" />
+          </div>
+        ) : (
+          <CardDescription className="flex flex-row gap-2">
+            <span className="uppercase">{ticker}</span>
 
-          {loading ? null : (
             <span className="relative flex size-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full size-2 bg-sky-500"></span>
             </span>
-          )}
-        </CardDescription>
+          </CardDescription>
+        )}
 
         {loading ? (
           <Skeleton className="w-96 h-10" />
@@ -90,22 +94,13 @@ export const CryptoPlayerPriceCard = ({
           )
         )}
       </CardHeader>
-      <CardContent>
-        {loading ? (
-          <Skeleton className="h-4 w-40" />
-        ) : (
-          <div className="text-xs text-muted-foreground">
-            {/* TODO: Probably show price incerase here? */}
-          </div>
-        )}
-      </CardContent>
 
       <CardFooter className="flex flex-col gap-6 border-t p-4 justify-center">
-        <div className="flex gap-2 top-0 right-0 justify-between h-full">
+        <div className="grid grid-cols-2 gap-2 top-0 right-0 justify-between h-full w-full">
           {loading ? (
             <>
-              <Skeleton className="size-8" />
-              <Skeleton className="size-8" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
             </>
           ) : (
             <TooltipProvider delayDuration={300}>

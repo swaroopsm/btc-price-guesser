@@ -179,7 +179,7 @@ export default function Play() {
     <div className="min-h-screen items-center flex">
       <div className="max-w-md flex-1 mx-auto">
         <div className=" flex flex-col gap-4">
-          <h1 className="text-center text-xl font-medium underline">
+          <h1 className="text-center text-xl font-semibold underline">
             BTC Price Guesser
           </h1>
           <ul className="flex justify-end [&_li]:before:content-['/']">
