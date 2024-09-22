@@ -1,40 +1,48 @@
-# Welcome to Remix!
+# BTC Price Guesser
 
-- 📖 [Remix docs](https://remix.run/docs)
+A web app that allows users to make guesses on whether the market price of Bitcoin (BTC/USD) will be higher or lower after one minute.
 
-## Development
+[Live Demo](https://btc-price-guesser.stikercloudapps.xyz/)
 
-Run the dev server:
+The project uses the following stack:
 
-```shellscript
-npm run dev
-```
+| Name                                      | Description       |
+| ----------------------------------------- | ----------------- |
+| [Remix](https://remix.run/)               | Frontend          |
+| [shadcn/ui](https://ui.shadcn.com/)       | Component library |
+| [Prisma](https://www.prisma.io/)          | ORM               |
+| [PostgreSQL](https://www.postgresql.org/) | Primary Database  |
+| [Coolify](https://coolify.io/)            | Hosting           |
 
-## Deployment
+## Getting started
 
-First, build your app for production:
+### Pre-requisites:
 
-```sh
-npm run build
-```
+- Install [nodejs via nvm](https://nodejs.org/en/download/package-manager)
+- Install [docker](https://www.docker.com/)
 
-Then run the app in production mode:
+### Setup Backend
 
-```sh
-npm start
-```
+- `docker compose up` to start the necessary backend services (e.g.: PostgreSQL)
+- `cp .env.template .env` and make sure to configure the `.env` according to your needs
 
-Now you'll need to pick a host to deploy it to.
+### Install dependencies & migrations
 
-### DIY
+- `npm install` to install dependencies
+- `npm run dev:prisma:migrate` to run database migrations
+- `npm run dev:prisma:generate` to generate prisma model types
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
+### Run Frontend
 
-Make sure to deploy the output of `npm run build`
+- `npm run dev`
+- Open the url (default: http://localhost:5173) in your browser
 
-- `build/server`
-- `build/client`
+### Deployment
 
-## Styling
+- Deployment is currently done manually from the [coolify](https://coolify.io/) UI
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+## TODO
+
+- [ ] Add GH actions to run linting and build
+- [ ] Logout if session expires (on window-refocus)
+- [ ] Unit tests
