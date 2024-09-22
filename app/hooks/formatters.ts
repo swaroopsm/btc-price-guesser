@@ -1,4 +1,3 @@
-import { currencyFormatter } from "~/lib/utils";
 import { useAppContext } from "~/contexts/AppContext";
 import { Money } from "~/types";
 
@@ -7,8 +6,8 @@ export const useCurrencyFormatter = () => {
 
   return {
     format: (price: Money) => {
-      const formatter = currencyFormatter({
-        locale,
+      const formatter = new Intl.NumberFormat(locale, {
+        style: "currency",
         currency: price.currency,
       });
 
