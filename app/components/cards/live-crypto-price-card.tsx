@@ -18,6 +18,7 @@ import {
   TooltipProvider,
 } from "../ui/tooltip";
 import { useCallback } from "react";
+import { Badge } from "../ui/badge";
 
 interface Props {
   ticker: string;
@@ -52,16 +53,18 @@ export const LiveCryptoPriceCard = ({
     [onPredictionChange]
   );
   const isPredictionChangeDisabled = Boolean(prediction);
+  const scoreBadgeVariant =
+    player?.score && player.score >= 0 ? undefined : "destructive";
 
   return (
     <Card aria-busy={Boolean(loading || !price)} className="relative">
       <div className="border-b p-4 flex gap-2 justify-between">
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-1 items-center">
           <CircleUserRound size={16} />
-          {player?.name}
+          <span className="text-sm font-medium">{player?.name}</span>
         </div>
 
-        <div>Score: {player?.score}</div>
+        <Badge variant={scoreBadgeVariant}>Score: {player?.score}</Badge>
       </div>
 
       <CardHeader className="pb-2">
@@ -91,7 +94,7 @@ export const LiveCryptoPriceCard = ({
           <Skeleton className="h-4 w-40" />
         ) : (
           <div className="text-xs text-muted-foreground">
-            TODO: +25% from last guess
+            {/* TODO: Probably show price incerase here? */}
           </div>
         )}
       </CardContent>

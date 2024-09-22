@@ -13,3 +13,11 @@ export const getGuessResult = ({
 
   return result;
 };
+
+export const getPredictionDisplayName = (prediction: Prediction) => {
+  if (prediction === Prediction.UP) {
+    return "High";
+  }
+
+  return "Low";
+};

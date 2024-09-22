@@ -16,3 +16,18 @@ export const useCurrencyFormatter = () => {
     },
   };
 };
+
+export const usePercentageFormatter = () => {
+  const { locale } = useAppContext();
+
+  return {
+    format: (value: number) => {
+      const formatter = new Intl.NumberFormat(locale, {
+        style: "percent",
+        maximumFractionDigits: 4,
+      });
+
+      return formatter.format(value);
+    },
+  };
+};

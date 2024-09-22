@@ -8,4 +8,5 @@ export interface Guess {
 
 export interface ResolvedGuess extends Guess {
   actual: Prediction;
+  resolvedPrice: Money;
 }

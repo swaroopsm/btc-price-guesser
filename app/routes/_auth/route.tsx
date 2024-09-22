@@ -6,11 +6,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const currentPlayer = await getCurrentPlayer(request.headers.get("Cookie"));
 
   if (!currentPlayer) {
-    redirect("/", {
-      status: 401,
-    });
-
-    return null;
+    return redirect("/");
   }
 
   return json({

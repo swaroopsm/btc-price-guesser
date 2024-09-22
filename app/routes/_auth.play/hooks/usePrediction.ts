@@ -11,12 +11,13 @@ interface Props {
 export const usePrediction = ({ price, onResolution }: Props) => {
   const [prediction, setPrediction] = useState<Guess | null>(null);
   const [canCheckPrediction, setCheckPrediction] = useState(false);
+  const [isWatching, setWatching] = useState(false);
 
   const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (prediction && !intervalRef.current) {
-      console.log("start polling");
+      setWatching(true);
 
       intervalRef.current = setTimeout(() => {
         setCheckPrediction(true);
@@ -42,11 +43,13 @@ export const usePrediction = ({ price, onResolution }: Props) => {
       if (hasPriceChanged && price && prediction) {
         setPrediction(null);
         setCheckPrediction(false);
+        setWatching(false);
         intervalRef.current = null;
 
         onResolution({
           ...prediction,
           actual: getGuessResult({ guess: prediction, price }),
+          resolvedPrice: price,
         });
       }
     }
@@ -55,5 +58,6 @@ export const usePrediction = ({ price, onResolution }: Props) => {
   return {
     prediction,
     setPrediction,
+    isWatching,
   };
 };
