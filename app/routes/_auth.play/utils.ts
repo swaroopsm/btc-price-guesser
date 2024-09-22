@@ -16,8 +16,8 @@ export const getGuessResult = ({
 
 export const getPredictionDisplayName = (prediction: Prediction) => {
   if (prediction === Prediction.UP) {
-    return "High";
+    return "Up";
   }
 
-  return "Low";
+  return "Down";
 };

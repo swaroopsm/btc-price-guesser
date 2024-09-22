@@ -37,7 +37,7 @@ const PriceText = ({ price }: { price: Money }) => {
   return formatter.format(price);
 };
 
-export const LiveCryptoPriceCard = ({
+export const CryptoPlayerPriceCard = ({
   price,
   loading,
   ticker,
@@ -124,7 +124,7 @@ export const LiveCryptoPriceCard = ({
                         prediction === Prediction.UP && "animate-bounce"
                       )}
                     />{" "}
-                    High
+                    Up
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" sideOffset={16}>
@@ -148,7 +148,7 @@ export const LiveCryptoPriceCard = ({
                         prediction === Prediction.DOWN && "animate-bounce"
                       )}
                     />{" "}
-                    Low
+                    Down
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="bottom" sideOffset={16}>

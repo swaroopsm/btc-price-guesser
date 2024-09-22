@@ -1,6 +1,6 @@
 import { ActionFunction, redirect } from "@remix-run/node";
 import { useBinanceStream, usePrediction } from "./hooks";
-import { LiveCryptoPriceCard } from "~/components/cards/live-crypto-price-card";
+import { CryptoPlayerPriceCard } from "~/components/cards/CryptoPlayerPriceCard";
 import { destroySession, getCurrentPlayer, getSession } from "~/sessions";
 import { AuthOutletContext, Prediction } from "~/types";
 import { ComponentProps, useCallback, useMemo, useState } from "react";
@@ -12,10 +12,6 @@ import { getRelativePriceChange } from "~/lib/utils";
 import { usePercentageFormatter } from "~/hooks";
 import { Button } from "~/components/ui/button";
 import { HowItWorksDialog } from "./components";
-
-// TODO: Change description
-export const description =
-  "A login form with email and password. There's an option to login with Google and a link to sign up if you don't have an account.";
 
 enum Actions {
   UpdateScore = "updateScore",
@@ -197,7 +193,7 @@ export default function Play() {
             </li>
           </ul>
 
-          <LiveCryptoPriceCard
+          <CryptoPlayerPriceCard
             price={price}
             loading={isLoading}
             ticker="BTC"

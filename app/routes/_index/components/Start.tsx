@@ -1,4 +1,5 @@
-import { Form } from "@remix-run/react";
+import { Form, useActionData, useNavigation } from "@remix-run/react";
+import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "~/components/ui/button";
@@ -12,6 +13,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { generateRandomPlayerName } from "~/lib/seed";
+import { cn } from "~/lib/utils";
 
 export const Start = () => {
   const [name, setName] = useState("");
@@ -19,6 +21,8 @@ export const Start = () => {
   const handleGenerateRandomName = () => {
     setName(generateRandomPlayerName());
   };
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
 
   return (
     <div className=" min-h-screen flex items-center">
@@ -55,8 +59,11 @@ export const Start = () => {
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Start
+              <Button type="submit" className="w-full" disabled={isSubmitting}>
+                {isSubmitting && (
+                  <LoaderCircle className="animate-spin absolute" />
+                )}
+                <span className={cn(isSubmitting && "invisible")}>Start</span>
               </Button>
             </Form>
           </CardContent>
