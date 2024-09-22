@@ -11,6 +11,7 @@ import { getPredictionDisplayName } from "./utils";
 import { getRelativePriceChange } from "~/lib/utils";
 import { usePercentageFormatter } from "~/hooks";
 import { Button } from "~/components/ui/button";
+import { HowItWorksDialog } from "./components";
 
 // TODO: Change description
 export const description =
@@ -187,9 +188,7 @@ export default function Play() {
           </h1>
           <ul className="flex justify-end [&_li]:before:content-['/']">
             <li>
-              <Button variant="link" size="sm">
-                How it works?
-              </Button>
+              <HowItWorksDialog />
             </li>
             <li>
               <Button variant="link" size="sm" onClick={handleLogout}>
