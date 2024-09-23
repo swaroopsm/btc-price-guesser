@@ -2,9 +2,11 @@
 
 A web app that allows users to make guesses on whether the market price of Bitcoin (BTC/USD) will be higher or lower after one minute.
 
+![screenshot](./screenshot.png)
+
 It uses the [Binance web sockets stream API](https://developers.binance.com/docs/binance-spot-api-docs/web-socket-streams) to get the latest BTC <> USD price and lets you predict if the price of BTC may go high or low in the next 1 minute.
 
-[Live Demo](https://btc-price-guesser.stikercloudapps.xyz/)
+[🚀 Live Demo](https://btc-price-guesser.stikercloudapps.xyz/)
 
 The project uses the following stack:
 
