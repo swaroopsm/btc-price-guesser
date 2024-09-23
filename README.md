@@ -28,6 +28,7 @@ The project uses the following stack:
 
 ### Install dependencies & migrations
 
+- `nvm use` so it picks the correct node.js version from `.nvmrc`
 - `npm install` to install dependencies
 - `npm run dev:prisma:migrate` to run database migrations
 - `npm run dev:prisma:generate` to generate prisma model types

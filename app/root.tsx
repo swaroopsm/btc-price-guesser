@@ -7,8 +7,6 @@ import {
 } from "@remix-run/react";
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 
-import "@fontsource-variable/inter";
-
 import "./tailwind.css";
 import { useThemeMode } from "./hooks";
 
