@@ -22,10 +22,12 @@ const { getSession, commitSession, destroySession } =
       //
       // expires: new Date(Date.now() + 60_000),
       httpOnly: true,
+
+      // Session is valid for only 1 hour
       maxAge: 60 * 60,
       path: "/",
       sameSite: "lax",
-      secrets: ["s3cret1"],
+      secrets: [process.env.SESSION_SECRET || "s3cret1"],
       secure: true,
     },
   });
