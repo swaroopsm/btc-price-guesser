@@ -1,6 +1,5 @@
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -31,12 +30,6 @@ interface Props {
   onPredictionChange: (prediction: Prediction) => void;
 }
 
-const PriceText = ({ price }: { price: Money }) => {
-  const formatter = useCurrencyFormatter();
-
-  return formatter.format(price);
-};
-
 export const CryptoPlayerPriceCard = ({
   price,
   loading,
@@ -45,6 +38,7 @@ export const CryptoPlayerPriceCard = ({
   player,
   onPredictionChange,
 }: Props) => {
+  const priceFormatter = useCurrencyFormatter();
   const handlePredictionUp = useCallback(
     () => onPredictionChange(Prediction.UP),
     [onPredictionChange]
@@ -68,7 +62,7 @@ export const CryptoPlayerPriceCard = ({
         <Badge variant={scoreBadgeVariant}>Score: {player?.score}</Badge>
       </div>
 
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-6">
         {loading ? (
           <div>
             <Skeleton className="w-10 h-6" />
@@ -89,7 +83,7 @@ export const CryptoPlayerPriceCard = ({
         ) : (
           price && (
             <CardTitle className="text-4xl">
-              <PriceText price={price} />
+              {priceFormatter.format(price)}
             </CardTitle>
           )
         )}

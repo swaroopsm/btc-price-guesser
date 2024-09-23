@@ -98,7 +98,7 @@ export default function Play() {
     if (isWatching && prediction) {
       return {
         status: "loading",
-        title: "Hold tight! Pray to the Crypto gods!",
+        title: "Hold tight and pray to the Crypto gods!",
         children: (
           <>
             Your prediction that BTC price will go{" "}

@@ -20,7 +20,7 @@ export const HowItWorksDialog = () => {
         <DialogHeader>
           <DialogTitle>How it works?</DialogTitle>
           <DialogDescription>
-            <ul className="list-disc p-4">
+            <ul className="list-disc p-4 text-left">
               <li>
                 This is an app that allows a player to make guesses on whether
                 the market price of Bitcoin (BTC/USD) will be higher or lower

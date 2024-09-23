@@ -1,6 +1,7 @@
-import { Form, useActionData, useNavigation } from "@remix-run/react";
-import { LoaderCircle } from "lucide-react";
+import { Form, useNavigation } from "@remix-run/react";
+import { LoaderCircle, CircleAlert } from "lucide-react";
 import { useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -15,7 +16,11 @@ import { Label } from "~/components/ui/label";
 import { generateRandomPlayerName } from "~/lib/seed";
 import { cn } from "~/lib/utils";
 
-export const Start = () => {
+interface Props {
+  error?: string;
+}
+
+export const Start = ({ error }: Props) => {
   const [name, setName] = useState("");
 
   const handleGenerateRandomName = () => {
@@ -28,6 +33,16 @@ export const Start = () => {
     <div className=" min-h-screen flex items-center">
       <div className="container">
         <Card className="mx-auto max-w-sm">
+          {error && (
+            <div className="p-4">
+              <Alert>
+                <CircleAlert className="size-4" />
+                <AlertTitle>Authentication Error</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            </div>
+          )}
+
           <CardHeader>
             <CardTitle className="text-2xl">BTC Guesser</CardTitle>
             <CardDescription>

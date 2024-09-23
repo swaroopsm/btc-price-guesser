@@ -1,9 +1,16 @@
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import {
+  ActionFunction,
+  json,
+  LoaderFunctionArgs,
+  redirect,
+} from "@remix-run/node";
 import { Start } from "./components";
 import { commitSession, getSession, getCurrentPlayerId } from "~/sessions";
 import { findOrCreatePlayer } from "~/.server/game";
+import { useLoaderData } from "@remix-run/react";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const currentPlayerId = await getCurrentPlayerId(
     request.headers.get("Cookie")
   );
@@ -12,7 +19,20 @@ export const loader: LoaderFunction = async ({ request }) => {
     return redirect("/play");
   }
 
-  return null;
+  const session = await getSession(request.headers.get("Cookie"));
+  const error = session.get("error");
+  console.log(session.get("error"));
+
+  return json(
+    {
+      error,
+    },
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    }
+  );
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -31,5 +51,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export default function Index() {
-  return <Start />;
+  const data = useLoaderData<typeof loader>();
+
+  return <Start error={data?.error} />;
 }
