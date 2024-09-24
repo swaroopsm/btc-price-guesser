@@ -8,7 +8,6 @@ import { Start } from "./components";
 import { commitSession, getSession, getCurrentPlayerId } from "~/sessions";
 import { findOrCreatePlayer } from "~/.server/game";
 import { useLoaderData } from "@remix-run/react";
-import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const currentPlayerId = await getCurrentPlayerId(
@@ -21,7 +20,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const session = await getSession(request.headers.get("Cookie"));
   const error = session.get("error");
-  console.log(session.get("error"));
 
   return json(
     {
